@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'maintenance_app/css/style_dashboard.css' %}">
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside id="sidebar" class="js-sidebar">
+            <!-- Content For Sidebar -->
+            <div class="vh-100 ">
+                <div class="sidebar-logo">
+                    <a href="#">HDADO</a>
+                </div>
+                <ul class="sidebar-nav">
+                    <li class="sidebar-item"> <!-- auth new placement on header sidebar -->
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#auth" data-bs-toggle="collapse"
+                            aria-expanded="false"><i class="fa-regular fa-user pe-2"></i>
+                            Auth
+                        </a>
+                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="login" class="sidebar-link">Login</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="register" class="sidebar-link">Register</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Forgot Password</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-header">
+                        Admin Elements
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'dashboard'%}" class="sidebar-link">
+                            <i class="fa-solid fa-list pe-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="fa-solid fa-list pe-2"></i>
+                            Dash 2
+                        </a>
+                    </li>
+                   
+                    <!--     -->
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
+                            aria-expanded="false"><i class="fa-solid fa-file-lines pe-2"></i>
+                            Maintenance
+                        </a>
+
+                        <ul id="pages" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="{% url 'index' %}" class="sidebar-link"> Calendrier Maintenance</a>
+                            </li>
+                            <li class="sidebar-item"> 
+                                <a href="{% url 'add_equip' %}" class="sidebar-link"> Equipements </a>
+                            </li>
+                            <li class="sidebar-item"><!-- to be deleted -->
+                                <a href="{% url 'm_request' %}" class="sidebar-link">Fiche intervention</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{% url 'kanban_task' %}" class="sidebar-link">Kanban Maintenance</a>
+                            </li>
+                            <li class="sidebar-item"> <!-- calendar-->
+                                <a href="{% url 'index' %}" class="sidebar-link"> History </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{% url 'piece' %}" class="sidebar-link">pièce de rechange</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#posts" data-bs-toggle="collapse"
+                            aria-expanded="false"><i class="fa-solid fa-sliders pe-2"></i>
+                            Gestion Stock
+                        </a>
+                        <ul id="posts" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Dashboard Stock</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Matiere Premiere</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Produits Fini</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#posts2" data-bs-toggle="collapse"
+                            aria-expanded="false"><i class="fa-solid fa-sliders pe-2"></i>
+                            Documentation / Rapport
+                        </a>
+                        <ul id="posts2" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">archive Fournisseur</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Archive Interne</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-item">
+                        <!-- Content For Sidebar : Auth has been moved to header, this code below need update 
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#auth" data-bs-toggle="collapse"
+                            aria-expanded="false"><i class="fa-regular fa-user pe-2"></i>
+                            Auth
+                        </a>
+                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Login</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Register</a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link">Forgot Password</a>
+                            </li>
+                        </ul>
+                    
+                        
+                        
+                        -->
+                    </li>  
+                    <li class="sidebar-header">
+                        Multi Level Menu
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#multi" data-bs-toggle="collapse"
+                            aria-expanded="false"><i class="fa-solid fa-share-nodes pe-2"></i>
+                            Multi Dropdown
+                        </a>
+                        <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="#" class="sidebar-link collapsed" data-bs-target="#level-1"
+                                    data-bs-toggle="collapse" aria-expanded="false">Level 1</a>
+                                <ul id="level-1" class="sidebar-dropdown list-unstyled collapse">
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">Level 1.1</a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a href="#" class="sidebar-link">Level 1.2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <div class="main">
+            
+            <nav class="navbar navbar-expand px-3 border-bottom">
+                <button class="btn" id="sidebar-toggle" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                    
+                </button>
+                <div class="navbar-collapse navbar">
+                    <ul class="navbar-nav"> Hello 
+                        <li class="nav-item dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                                <img src="image/profile.jpg" class="avatar img-fluid rounded" alt="">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a href="#" class="dropdown-item">Profile</a>
+                                <a href="#" class="dropdown-item">Setting</a>
+                                <a href="#" class="dropdown-item">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main class="content px-3 py-2">
+                <div class="container-fluid">
+            {% block content %}{% endblock %}
+                </div>
+            </main>
+
+            
+            <a href="#" class="theme-toggle">
+                <i class="fa-regular fa-moon"></i>
+                <i class="fa-regular fa-sun"></i>
+            </a>
+            
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-muted">
+                        <div class="col-6 text-start">
+                            <p class="mb-0">
+                                <a href="#" class="text-muted">
+                                    <strong> - Hamza.A -</strong>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-muted">Contact</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-muted">About Us</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-muted">Terms</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="text-muted">Booking</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{% static 'maintenance_app/js/script_dashboard.js' %}"></script>
+</body>
+
+</html>

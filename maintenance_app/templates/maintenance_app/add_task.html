@@ -1,0 +1,44 @@
+{% load crispy_forms_tags %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% block content %}
+  <h2>Add task</h2>
+  <form method="POST">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <button type="submit" > Save Changes </button>
+  </form>
+
+<!--   TODO :
+    
+
+    ADD STYLING (CSS - bootstrap)
+
+
+
+-->
+<script>
+    // running good : 
+     // Add a timeout to remove the success message after 5 seconds
+     setTimeout(function() {
+      var successMessage = document.querySelector('.messages');
+      if (successMessage) {
+        successMessage.style.display = 'none';
+      }
+    }, 2000);  // 5000 milliseconds (5 seconds)
+
+
+
+
+
+</script>
+
+
+{% endblock %}

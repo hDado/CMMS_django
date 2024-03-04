@@ -1,0 +1,125 @@
+<!-- maintenance equipment.html -->
+{% extends 'maintenance_app/main.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %} Ajouter equipements {% endblock %}
+
+{% block content %}
+  <h2> Ajouter equipements d'usine</h2>
+  <div class="card" style="width: 50rem; ">
+    <div class="card-header">
+      
+      <div class="card-body">
+      <button  type="button" class="btn btn-primary position-relative" onclick="openAddCatPopup()">Ajouter une category d'equipements</button>
+     
+      
+    </div>
+    <!-- Button to show/hide the form -->
+      <button type="button" class="btn btn-primary position-relative" id="showFormBtn">Ajouter Equipements </button>
+      </div>
+    
+      </div>
+    
+
+  <!-- test  -->
+    
+  <!--TEST END -->
+<!-- Hidden div containing the form -->
+<div id="formContainer" style="display: none;">
+  <!-- Your Django form goes here -->
+      <form method="post">
+        {% csrf_token %}
+        <div class="card" style="width: 50rem;">
+            <div class="card-header">
+                <h6 class="card-text">Fiche d'equipements :</h6>
+            </div>
+            <div class="card-body">
+                {% crispy equip_form %}
+                <!-- test -->
+            </div>
+            <button type="submit">Save</button>
+        </div>
+    </form>
+    
+</div>
+  
+  <!-- [ Hover-table ] start -->
+  <div class="col-xl-12">
+    <div class="card">
+        <div class="card-header">
+            <h5>Tableaux des equipements disponibles </h5>
+            <span class="d-block m-t-5"> Todo :ajouter un lien <code>table-hover</code> add link to maintenance</span>
+        </div>
+        <div class="card-block table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th> Name </th>
+                            <th> Fournisseur </th>
+                            <th> Reference fournisseur </th>
+                            <th> Modele </th>
+                            <th> Categorie </th>
+                            <th> numero de serie </th>
+                            <th> description </th>
+                            <th> Prix Achat </th>
+                            <th> Date Mise en marche </th>
+                            <th> Utiliser par </th>
+                            <th> Garantie (date expiration) </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for equip in equips_all %}
+                        
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>{{ equip.name }}</td>
+                            <td>{{ equip.vendor }}</td>
+                            <td>{{ equip.vendor_reference }}</td>
+                            <td>{{ equip.model }}</td>
+                            <td>{{ equip.category }}</td>
+                            <td>{{ equip.serial_number }}</td>
+                            <td>{{ equip.description }}</td>
+                            <td>{{ equip.cost }}</td>
+                            <td>{{ equip.effective_date }}</td>
+                            <td>{{ equip.used_by }}</td>
+                            <td>{{ equip.warranty_expiration }}</td>
+                            
+                          </tr>
+                        {% endfor %}
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Hover-table ] end -->
+
+
+
+
+
+
+
+
+
+  <script>
+    
+    function openAddCatPopup() {
+       window.open("{% url 'equipcat' %}", "Add equipements Category", "width=600,height=400");
+   }
+// JavaScript to toggle form visibility
+    document.getElementById('showFormBtn').addEventListener('click', function() {
+        var formContainer = document.getElementById('formContainer');
+        formContainer.style.display = (formContainer.style.display === 'none') ? 'block' : 'none';
+      });
+
+
+</script>
+
+
+{% endblock %}

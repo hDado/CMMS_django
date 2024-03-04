@@ -1,0 +1,87 @@
+{% extends 'maintenance_app/main.html' %}
+{% load crispy_forms_tags %}
+<!-- todo : display data from GET request : and forms
+add styling
+inventory management - 
+link with maintenance module
+-->
+
+
+{% block content %}
+
+<div class="card">
+  <div class="card-body">
+    <h2> Piece de rechange </h2>
+    <form method="POST">
+      {% csrf_token %}
+
+      {% crispy piece_form %}
+      {{ piece_form.errors }}
+
+      
+      <!-- <button type="submit" > Save </button> -->
+      
+    </form>
+  </div>
+</div>
+ 
+ 
+  <!-- Display existing pieces from the database -->
+ 
+
+
+  <!-- [ Hover-table ] start -->
+  <div class="col-xl-12">
+    <div class="card">
+        <div class="card-header">
+            <h5>Liste des pieces de rachanges</h5>
+            <span class="d-block m-t-5"> Todo :ajouter un lien <code>table-hover</code> add link to maintenance</span>
+        </div>
+        <div class="card-block table-border-style">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th> Name </th>
+                            <th> Modele </th>
+                            <th> Code </th>
+                            <th> fournisseur </th>
+                            <th> quantite </th>
+                            <th> seuil_minimum </th>
+                            <th> emplacement_stockage </th>
+                            <th> Date achat </th>
+                            <th> Garantie (Mois) </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for piece in piece_all %}
+                        
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>{{ piece.nom_piece }}</td>
+                            <td>{{ piece.modele }}</td>
+                            <td>{{ piece.code }}</td>
+                            <td>{{ piece.fournisseur }}</td>
+                            <td>{{ piece.quantite }}</td>
+                            <td>{{ piece.prix }}</td>
+                            <td>{{ piece.seuil_minimum }}</td>
+                            <td>{{ piece.emplacement_stockage }}</td>
+                            <td>{{ piece.date_achat }}</td>
+                            <td>{{ piece.garantie_mois }}</td>
+                        
+                          </tr>
+                        {% endfor %}
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Hover-table ] end -->
+
+
+
+
+{% endblock %}

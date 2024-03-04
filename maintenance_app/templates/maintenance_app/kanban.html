@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .kanban-board {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .kanban-column {
+            flex: 0 0 300px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .kanban-task {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="kanban-board">
+        <div class="kanban-column bg-light p-3">
+            <h2 class="mb-3">To Do</h2>
+            <div class="kanban-task" data-task-id="1">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                   
+                </form>
+            </div>
+            <div class="kanban-task" data-task-id="2">
+                <p>Task 2</p>
+            </div>
+        </div>
+
+        <div class="kanban-column bg-light p-3">
+            <h2 class="mb-3">In Progress</h2>
+            <!-- Add tasks for In Progress column -->
+        </div>
+
+        <div class="kanban-column bg-light p-3">
+            <h2 class="mb-3">Done</h2>
+            <!-- Add tasks for Done column -->
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and jQuery (Include these scripts at the end of the body for better performance) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

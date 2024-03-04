@@ -1,0 +1,21 @@
+<!-- maintenance request.html -->
+{% extends 'maintenance_app/main.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %} Demande de Maintenance {% endblock %}
+
+{% block content %}
+  <h2> Ajouter une demande de maintenance (new)</h2>
+  <form method="post">
+    {% csrf_token %}
+    
+    {{ m_form|crispy }}
+    
+    <button type="submit">Save</button>
+  </form>
+  
+
+
+{% endblock %}

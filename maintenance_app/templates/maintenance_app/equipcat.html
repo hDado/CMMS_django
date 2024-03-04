@@ -1,0 +1,31 @@
+<!-- maintenance equipment.html -->
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Equipement Category</title>
+</head>
+<body>
+    
+</body>
+</html>
+
+
+
+
+
+
+
+  <h2> Ajouter equipements d'usine</h2>
+  <form method="post">
+    {% csrf_token %}
+    
+    {{ cat_form|crispy }}
+    
+    <button type="submit">Save</button>
+  </form>
+
+
+

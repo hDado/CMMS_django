@@ -1,0 +1,14 @@
+<!-- edit_template.html -->
+{% extends 'maintenance_app/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <h2>Edit Your Model</h2>
+  <form method="POST">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <button type="submit" > Save Changes </button>
+  </form>
+{% endblock %}

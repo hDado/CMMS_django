@@ -1,0 +1,33 @@
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+.login,
+.image {
+  min-height: 100vh;
+}
+
+.bg-image {
+  background-image: url('https://images.unsplash.com/photo-1517191434949-5e90cd67d2b6?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+  background-position: center center;
+}
+
+/* Change Register button color to grey */
+.btn-info {
+    background-color: rgba(254, 252, 252, 0);
+    color: rgb(218, 79, 15); /* Text color */
+    border-color: transparent;
+    
+    
+
+}
+/* Add some padding to the buttons */
+.btn {
+    padding: 10px 20px;
+    margin-right: 10px; /* Adjust as needed */
+    
+}

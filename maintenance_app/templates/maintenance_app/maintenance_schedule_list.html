@@ -1,0 +1,168 @@
+{% extends 'maintenance_app/base.html' %}
+
+{% block content %}
+
+    <h1>Maintenance Schedules</h1>
+    <h2>Ongoing Schedules (Today)</h2>
+
+<p>Status: {{ status }}</p>
+    <table id="Nowtable" style="width:70%">
+        <thead>
+            <tr>
+                <th>Machine Name</th>
+                <th>Description</th>
+                <th>Technique</th>
+                <th> Duration </th>
+                <th>Maintenance Type</th>
+                <th>Scheduled Date</th>
+                <th>Assigned Person</th>
+                <th> Actions </th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for schedule in today_schedules %}
+            
+                <tr>
+                    <td>{{ schedule.machine.name }}</td>
+                    <td>{{ schedule.description }}</td>
+                    <td>{{ schedule.get_technique_display }}</td>
+                    <td>{{ schedule.duration_hours }}</td>
+                    <td>{{ schedule.get_maintenance_type_display }}</td>
+                    <td>{{ schedule.scheduled_date }}</td>
+                    <td>
+                        {% if schedule.assigned_person %}
+                            {{ schedule.assigned_person.user.username }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-primary edit-btn" data-pk="{{ schedule.pk }}">Edit</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+    <!-- Display future Schedules -->
+
+
+<p> Future Maintenance Schedule</p>
+    <table id="Ftable" style="width:  70%">
+        <thead>
+            <tr>
+                <th>Machine Name</th>
+                <th>Description</th>
+                <th>Technique</th>
+                <th> Duration</th>
+                <th> Maintenance Type</th>
+                <th> Scheduled Date</th>
+                <th> Assigned Person</th>
+                <th> Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+           <!-- Inside the <tbody> section of your table -->
+           
+            {% for schedule in future_schedules %}
+           
+            <tr>
+                <td class="edit" data-field="machine.name">{{ schedule.machine.name }}</td>
+                <td class="edit" data-field="description">{{ schedule.description }}</td>
+                <td class="edit" data-field="get_technique_display">{{ schedule.get_technique_display }}</td>
+                <td class="edit" data-field="duration_hours">{{ schedule.duration_hours }}</td>
+                <td class="edit" data-field="get_maintenance_type_display">{{ schedule.get_maintenance_type_display }}</td>
+                <td class="edit" data-field="scheduled_date">{{ schedule.scheduled_date }}</td>
+                <td class="edit" data-field="assigned_person.user.username">
+                    {% if schedule.assigned_person %}
+                        {{ schedule.assigned_person.user.username }}
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-primary edit-btn" data-pk="{{ schedule.pk }}"> Edit </button>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+
+
+    <!-- Display schedule details -->
+   
+<!-- DataTables initialization -->
+<script>
+
+    // DataTables configuration options
+$(document).ready(function() {
+        let table = $('#Nowtable').DataTable({
+            // DataTables configuration options
+
+            
+        });
+
+        let table2= $('#Ftable').DataTable({
+            // DataTables configuration options
+        });
+    });
+
+
+   // Add a click event for the edit buttons
+$('.edit-btn').on('click', function() {
+
+    // Retrieve the primary key from the data-pk attribute
+    const pk = $(this).data('pk');
+
+    // Send an AJAX request to fetch the edit form
+    $.ajax({
+        url: `/edit/${pk}/`,
+        method: 'GET',
+        success: function(response) {
+
+            // Replace the content of the row with the edit form
+            $(`tr[data-pk="${pk}"]`).html(response);
+            
+            // Open the edit page in a new tab or window
+            window.open(`/edit/${pk}/`, '_blank');
+
+            // Optionally, you can bind a new click event to the form submission
+            $('#edit-form').on('submit', function(event) {
+                event.preventDefault();
+
+                // Perform an AJAX request to submit the form data
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(submitResponse) {
+                        // Handle success (e.g., display a success message)
+                        "Form edited"
+                    },
+                    error: function(submitError) {
+                        // Handle errors (e.g., display an error message)
+                    }
+                });
+            });
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.error('Error fetching edit form:', textStatus, errorThrown);
+            console.log(xhr.responseText);
+        }
+    });
+});
+
+
+
+           
+
+
+            
+
+
+
+</script>
+
+{% endblock %}

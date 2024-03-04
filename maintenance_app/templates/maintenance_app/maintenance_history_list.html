@@ -1,0 +1,112 @@
+<!-- maintenance_app/templates/maintenance_app/maintenance_history_list.html -->
+{% extends 'maintenance_app/base.html' %}
+    
+
+{% block content %}
+<table id="Ptable" style="width: 80%"> 
+    <thead>
+        <tr>
+            <th>Machine Name</th>
+            <th>Description</th>
+            <th>Technique</th>
+            <th> Duration </th>
+            <th> Maintenance Type </th>
+            <th> Scheduled Date </th>
+            <th> Assigned Person </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for schedule in past_schedules %}
+            <tr>
+                <td>{{ schedule.machine.name }}</td>
+                <td>{{ schedule.description }}</td>
+                <td>{{ schedule.get_technique_display }}</td>
+                <td>{{ schedule.duration_hours }}</td>
+                <td>{{ schedule.get_maintenance_type_display }}</td>
+                <td>{{ schedule.scheduled_date }}</td>
+                <td>
+                    {% if schedule.assigned_person %}
+                        {{ schedule.assigned_person.user.username }}
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-primary edit-btn" data-pk="{{ schedule.pk }}">Edit</button>
+                </td>
+            </tr>
+       
+        {% endfor %}
+       
+    </tbody>
+</table>
+</body>
+
+
+<script>
+
+$(document).ready(function() {
+    let table1 = $('#Ptable').DataTable({
+        // DataTables configuration options
+    });
+    // Add a click event for the edit buttons
+    $('.edit-btn').on('click', function() {
+        
+        // Retrieve the primary key from the data-pk attribute
+        const pk = $(this).data('pk');
+
+        // Send an AJAX request to fetch the edit form
+       
+    // Send an AJAX request to fetch the edit form
+    $.ajax({
+        url: `/edit-2/${pk}/`,
+        method: 'GET',
+        success: function(response) {
+
+            // Replace the content of the row with the edit form
+            $(`tr[data-pk="${pk}"]`).html(response);
+            
+            // Open the edit page in a new tab or window
+            window.open(`/edit-2/${pk}/`, '_blank');
+
+            // Optionally, you can bind a new click event to the form submission
+            $('#edit-form').on('submit', function(event) {
+                event.preventDefault();
+
+                // Perform an AJAX request to submit the form data
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(submitResponse) {
+                        // Handle success (e.g., display a success message)
+                    },
+                    error: function(submitError) {
+                        // Handle errors (e.g., display an error message)
+                    }
+                });
+            });
+        },
+                          
+
+
+
+            error: function(xhr, textStatus, errorThrown) {
+            console.error('Error fetching edit form:', textStatus, errorThrown);
+            console.log(xhr.responseText);
+            }
+        });
+    });
+});
+
+            // DataTables con
+
+
+</script>
+
+
+{% endblock %}
+
+
+
+

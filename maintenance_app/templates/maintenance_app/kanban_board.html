@@ -1,0 +1,253 @@
+<!-- kanban_board.html -->
+{% extends 'maintenance_app/main.html' %}
+{% load static %}
+
+ 
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'maintenance_app/css/kanban.css' %}">
+
+    <title>Kanban Board</title>
+   
+
+{% block content %}
+
+<div class="container">
+    <h1 class="text-center">Work orders</h1>
+    <button onclick="openAddTaskPopup()">Add New Task</button>
+    <div class="kanban-container">
+           <!-- Container for each status -->
+    <div class="container">
+        <div class="row">
+            <!-- To Do column -->
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header bg-light">
+                        <h2 class="text-center">To Do</h2>
+                    </div>
+                    <div class="card-body" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        {% for task in tasks %}
+                            {% if task.status == 'todo' %}
+                                <div class="card mb-3" draggable="true" ondragstart="drag(event)" data-task-id="{{ task.id }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ task.title }}</h5>
+                                        <p class="card-text">{{ task.description }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+             <!--   in progress column -->
+             <div class="col">
+                <div class="card text-dark bg-danger mb-3" style="width: 18rem;">
+                    <div class="card-header bg-light">
+                        <h2 class="text-center">In progress</h2>
+                    </div>
+                    <div class="card-body" id="in_progress" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        {% for task in tasks %}
+                            {% if task.status == 'in_progress' %}
+                                <div class="card mb-3" draggable="true" ondragstart="drag(event)" data-task-id="{{ task.id }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ task.title }}</h5>
+                                        <p class="card-text">{{ task.description }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+             <!--   Done column -->
+             <div class="col">
+                <div class="card text-dark bg-success mb-3" style="width: 18rem;">
+                    <div class="card-header bg-light mb-3">
+                        <h2 class="text-center"> Done</h2>
+                    </div>
+                    <div class="card-body" id="Done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        {% for task in tasks %}
+                            {% if task.status == 'Done' %}
+                                <div class="card mb-3" draggable="true" ondragstart="drag(event)" data-task-id="{{ task.id }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ task.title }}</h5>
+                                        <p class="card-text">{{ task.description }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+
+   
+        <!-- Add more columns as needed -->
+
+<script>
+  
+    //open pop up to add_task :   -->  
+    function openAddTaskPopup() {
+        window.open("{% url 'add_task' %}", "Add Task", "width=600,height=400");
+    }
+
+
+
+    function allowDrop(event) {
+        event.preventDefault();
+    
+        // Get the dragged task
+        const taskId = event.dataTransfer.getData('text/plain');
+        const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+
+        // Check if the drop target or its ancestor is a .card-body
+        const isCardBody = event.target.classList.contains('card-body') || event.target.closest('.card-body');
+
+        if (isCardBody) {
+            // Check if the task is already in the target container
+            const isTaskInTargetContainer = Array.from(event.target.children).some(child => child === taskElement);
+
+            if (isTaskInTargetContainer) {
+                console.log('Task is already in the target container.');
+                return;
+            }
+
+            // Move the task element to the new column
+            event.target.appendChild(taskElement);
+
+            // Ensure correct order of tasks within the container
+            updateTaskOrder(event.target);
+        } else {
+            // Update task status (you need to implement this logic in Django views)
+            const newStatus = event.target.id;
+            updateTaskStatus(taskId, newStatus);
+
+            // Move the task element to the new column
+            event.target.appendChild(taskElement);
+            
+            // Ensure correct order of tasks within the container
+            updateTaskOrder(event.target);
+        }
+
+            }
+/*
+This is a multi-line comment in JavaScript.
+
+
+ // Check if the drop target or its ancestor is a card-body
+        const isCardBody = event.target.classList.contains('card-body') || event.target.closest('.card-body');
+
+        if (!isCardBody) {
+            // Update task status (you need to implement this logic in Django views)
+            const newStatus = event.target.id;
+            updateTaskStatus(taskId, newStatus);
+
+            // Move the task element to the new column
+            event.target.appendChild(taskElement);
+        }
+        
+    }
+
+
+*/
+       
+
+    function drag(event) {
+        event.dataTransfer.setData('text/plain', event.target.dataset.taskId);
+    }
+
+    //
+ 
+
+    function drop(event) {
+        event.preventDefault();
+        const taskId = event.dataTransfer.getData('text/plain');
+        const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+        const newStatus = event.target.id;
+
+        // Check if the task is already in the target container
+        const isTaskInTargetContainer = Array.from(event.target.children).some(child => child === taskElement);
+
+        if (isTaskInTargetContainer) {
+            console.log('Task is already in the target container.');
+            return;
+        }
+ 
+
+        // Update task status (you need to implement this logic in Django views)
+        updateTaskStatus(taskId, newStatus);
+
+        // Move the task element to the new column
+        event.target.appendChild(taskElement);
+
+        // Ensure correct order of tasks within the container
+        updateTaskOrder(event.target);
+
+    }
+    // Create a new <div> container for the task and append it to the target container
+        //const newTaskContainer = document.createElement('div');
+        //newTaskContainer.className = 'task';
+        //newTaskContainer.draggable = true;
+        //newTaskContainer.dataset.taskId = taskId;
+        //newTaskContainer.ondragstart = drag;
+
+        // Copy the content of the original task to the new container
+        //newTaskContainer.innerHTML = taskElement.innerHTML;
+
+         // Insert the new task before the dragged task
+        //event.target.insertBefore(newTaskContainer, taskElement);
+
+
+
+
+    function updateTaskStatus(taskId, newStatus) {
+        
+        // Implement an AJAX request to update the task status in the Django backend
+        // Example using fetch:
+        fetch(`/update_task_status/${taskId}/${newStatus}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token
+            },
+            body: JSON.stringify({}),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Log the response from the server
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // Function to ensure correct order of tasks within the container
+    function updateTaskOrder(container) {
+        const tasks = container.querySelectorAll('.task');
+        tasks.forEach((task, index) => {
+            task.style.order = index + 1;
+        });}
+
+
+
+
+</script>
+
+
+
+{% endblock %}
