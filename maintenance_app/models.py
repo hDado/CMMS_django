@@ -1,7 +1,8 @@
 # maintenance_app/models.py
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import date
+from datetime import date, datetime
+
 
 
 
@@ -33,7 +34,7 @@ class Person(models.Model):
 class Technician(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     position = models.CharField(max_length=100)
-
+    
     def __str__(self):
         return self.user.username
 
@@ -67,6 +68,7 @@ class Equipment(models.Model):
 
 
 class PreventiveMaintenance(models.Model):
+    name =  models.CharField(max_length=50, default='preventive -')
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     maintenance_frequency_days = models.IntegerField()
     maintenance_duration = models.DurationField()
@@ -76,24 +78,12 @@ class PreventiveMaintenance(models.Model):
         return f"Preventive Maintenance for {self.equipment.name}"
 #corrective maintenance :
 class CorrectiveMaintenance(models.Model):
+    name =  models.CharField(max_length=50)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     scheduled_date = models.DateField() #start time
     maintenance_duration = models.DecimalField(max_digits=5, decimal_places=2, default=0.00) #end time
-    end_time = models.DateTimeField(null=True, blank=True)
+ 
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        
-        # Calculate end time based on start time and maintenance duration
-        if self.scheduled_date and self.maintenance_duration:
-            start_time = datetime.combine(self.scheduled_date, datetime.min.time())
-            duration_hours = int(self.maintenance_duration)
-            duration_minutes = int((self.maintenance_duration - duration_hours) * 60)
-            duration = timedelta(hours=duration_hours, minutes=duration_minutes)
-            self.end_time = start_time + duration
-            self.save(update_fields=['end_time'])
-    
-    
     
     def __str__(self):
         return f"Corrective Maintenance for {self.equipment.name}"
@@ -103,15 +93,20 @@ class CorrectiveMaintenance(models.Model):
 class MaintenanceRequest(models.Model):
     MAINTENANCE_TYPE_CHOICES = [
         ('corrective', 'Corrective Maintenance'),
-        ('preventive', 'Preventive Maintenance'),
+        #('preventive', 'Preventive Maintenance'),
     ]
 
     title = models.CharField(max_length=100)
     description = models.TextField()
     maintenance_type = models.CharField(max_length=10, choices=MAINTENANCE_TYPE_CHOICES)
-    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE, null=True, blank=True)
-    preventive_maintenance = models.ForeignKey(PreventiveMaintenance, on_delete=models.CASCADE, null=True, blank=True)
+    
+    #equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE, null=True, blank=True)
+    corrective_maintenance_entries = models.ManyToManyField(CorrectiveMaintenance, blank=True)
+    #preventive_maintenance = models.ForeignKey(PreventiveMaintenance, on_delete=models.CASCADE, null=True, blank=True)
     technician = models.ForeignKey(Technician, on_delete=models.SET_NULL, blank=True, null=True)
+    
+    
+    
     def save(self, *args, **kwargs):
         if self.maintenance_type == 'preventive' and self.equipment:
             self.title = f"Preventive Maintenance - {self.equipment.name}"

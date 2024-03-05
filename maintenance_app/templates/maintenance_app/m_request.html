@@ -11,11 +11,47 @@
   <form method="post">
     {% csrf_token %}
     
-    {{ m_form|crispy }}
     
-    <button type="submit">Save</button>
+
+    <div class="row">
+      {{ maintenance_request_form.title|as_crispy_field }}
+    </div>
+    <div class="row">
+      {{ maintenance_request_form.maintenance_type|as_crispy_field }}
+    </div>
+    
+    <div class="row">
+      {{ maintenance_request_form.description|as_crispy_field }}
+    </div>
+    
+    
+    <div class="form-section" data-section="section1">
+      {{ maintenance_request_form.technician|as_crispy_field }}
+      <button type="button" class="btn btn-secondary" onclick="openTechnicianPopup()">Ajouter Technician</button>
+  </div>
+
+    <h6> Corrective maintenance details </h6>
+    
+    {{ corrective_maintenance_form|crispy }}
+    
+    <div class="button-holder">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" class="btn btn-secondary" onclick="openTechnicianPopup()">Select Technician</button>
+  </div>
   </form>
   
+
+
+
+
+
+
+
+  <script>
+    function openTechnicianPopup() {
+        window.open('/add-technician/', 'Technician Popup', 'width=600,height=400');
+    }
+</script>
 
 
 {% endblock %}

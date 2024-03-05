@@ -14,12 +14,17 @@ urlpatterns = [
     path('add-equipements/', views.EquipView, name='add_equip'),
     #add equip category window : 
     path('equips-category/', views.EquipCatView, name='equipcat'),
+    #add_technician : 
+     path('add-technician/', views.addTechView, name='add_tech'),
     #Request (maintenance Intervention)
     path('add-maintenance/', views.MRequestView, name='m_request'),
+    #preventive :
+
     
     
-    
-    path('add_maintenance_app/', views.MaintenanceScheduleView, name='add_maintenance_app'),
+
+
+    #path('add_maintenance_app/', views.MaintenanceScheduleView, name='add_maintenance_app'),
     #View maintenance history table :
     path('maintenance-history/', views.PastMaintenanceView, name='maintenance_history_list'),
     #View present and future history tables : 

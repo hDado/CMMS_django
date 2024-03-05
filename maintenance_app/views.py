@@ -1,9 +1,9 @@
 # maintenance_app/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse 
-from .models import MaintenanceRequest,EquipmentCategory, Equipment, MaintenanceHistory, MaintenanceSchedule, Events, Task, PieceRechange
+from .models import Technician, CorrectiveMaintenance , MaintenanceRequest,EquipmentCategory, Equipment, MaintenanceHistory, MaintenanceSchedule, Events, Task, PieceRechange
 from django.utils import timezone
-from .forms import MaintenanceRequestForm,EquipCategoryForm,MaintenanceScheduleForm, TaskForm, PieceForm, EquipForm
+from .forms import TechForm, CorrectiveForm, MaintenanceRequestForm,EquipCategoryForm,MaintenanceScheduleForm, TaskForm, PieceForm, EquipForm
 from django.contrib import messages
 from crispy_forms.helper import FormHelper
 import logging
@@ -26,6 +26,21 @@ def dashboard(request):
     return render(request, 'maintenance_app/dashboard.html')
 
 #Maintenance :
+#Technician :
+def addTechView(request):
+    all_tech = Technician.objects.all()
+    if request.method == 'POST':
+        technician_form = TechForm(request.POST) #call form in forms.py
+        if technician_form.is_valid():
+            technician = technician_form.save()
+            messages.success(request, 'Technicien ajouter a la maintenance')
+            return redirect('add_tech')  # Redirect to a list view or another page
+         
+    else:
+        technician_form = TechForm()
+    context= {'technician_form' : technician_form}
+    return render(request, 'maintenance_app/add_technician.html',context)
+
 #Equipement : 
 def EquipView(request):
     equips_all = Equipment.objects.all()
@@ -53,22 +68,54 @@ def EquipCatView(request):
 
 
 
-
+#
 #maintenance request : intervention (fiche_m.html)
-# 
+def add_preventive_maintenance(request): #todo
+    if request.method == 'POST':
+        form_p = PreventiveForm(request.POST)
+        if form.is_valid():
+            form_p.save()
+            return redirect('success_page')  # Redirect to a success page
+    else:
+        form_p = PreventiveMaintenanceForm()
+
+    return render(request, 'your_template.html', {'form_p': form_p})
+#
+"""
+def add_corrective_maintenance(request):
+    if request.method == 'POST':
+        form_c = CorrectiveForm(request.POST)
+        if form_c.is_valid():
+            form_c.save()
+            return redirect('success_page')  # Redirect to a success page
+    else:
+        form_c = CorrectiveMaintenanceForm()
+
+    return render(request, 'm_request.html', {'form_c': form_c})
+"""
+#  
 def MRequestView(request):
     request_all = MaintenanceRequest.objects.all()
     if request.method == 'POST':
         m_form = MaintenanceRequestForm(request.POST)
-        if m_form.is_valid():
-            maintenance_form = m_form.save()
+        corrective_m = CorrectiveForm(request.POST)
+
+        if m_form.is_valid() and corrective_m.is_valid():
+            maintenance_request = m_form.save(commit=False)
+            corrective_maintenance = corrective_m.save()
+            maintenance_request.save()  # Save the MaintenanceRequest first to get an id
+            maintenance_request.corrective_maintenance_entries.add(corrective_maintenance)
+            maintenance_request.save()
             return redirect('m_request')  # Redirect to a list view or another page
     else:
         m_form = MaintenanceRequestForm()
-    
-    return render(request, 'maintenance_app/m_request.html', {'m_form': m_form, 'request_all' : request_all})
+        corrective_m = CorrectiveForm()
+
+    return render(request, 'maintenance_app/m_request.html', {'maintenance_request_form': m_form, 'corrective_maintenance_form': corrective_m})
  
-      
+
+
+
 #piece detache : #to be updated - Todo : edit - delete
 def Piece(request):
     piece_all= PieceRechange.objects.all()

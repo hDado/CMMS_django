@@ -1,0 +1,49 @@
+{% load crispy_forms_tags %}
+{% load static %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Ajouter Un technicien </title>
+
+     <!-- Link CSS file -->
+    <link rel="stylesheet" href="{% static 'maintenance_app/css/addtech.css' %}" >
+</head>
+<body>
+    
+    <div class="card">
+        <div class="card-details">
+          <p class="text-title">Ajouter Un technicien pour la maintenance </p>
+          <p class="text-body">Technician/ Engineer must have an account into the system</p>
+          <form class="form-container" method="post">
+            {% csrf_token %}
+           <div class="div-class">
+            
+            {{ technician_form.user|as_crispy_field }}
+
+           </div>
+           <div class="div-class">
+            
+            {{ technician_form.position|as_crispy_field}}
+
+           </div>
+         
+           <button type="submit" class="card-button"> Save </button>
+          </form>
+        
+        </div>
+        <!-- todo -->
+ 
+        
+      </div>
+
+</body>
+</html>

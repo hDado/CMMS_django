@@ -1,8 +1,8 @@
 # forms.py
 from django import forms
-from .models import MaintenanceRequest,CorrectiveMaintenance,PreventiveMaintenance ,EquipmentCategory,Equipment,MaintenanceSchedule, Task, PieceRechange
+from .models import Technician, MaintenanceRequest,CorrectiveMaintenance,PreventiveMaintenance ,EquipmentCategory,Equipment,MaintenanceSchedule, Task, PieceRechange
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Div, Field, Row, Column
+from crispy_forms.layout import ButtonHolder,Layout, Submit, Div, Field, Row, Column
 
 
 
@@ -23,7 +23,15 @@ class TaskForm(forms.ModelForm):
         fields = "__all__"
 
 #=========================
-#Maintenance: Equipement : 
+#Maintenance: 
+# Technician (User):
+class TechForm(forms.ModelForm):
+    class Meta:
+        model = Technician
+        fields = "__all__"
+# 
+# 
+# Equipement : 
 class EquipForm(forms.ModelForm):
     class Meta:
         model = Equipment
@@ -77,15 +85,20 @@ class PreventiveForm(forms.ModelForm):
 class CorrectiveForm(forms.ModelForm):
     class Meta:
         model = CorrectiveMaintenance
-        fields = "__all__"
+        fields = ["name", "equipment", "scheduled_date", "maintenance_duration"]
+
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+    
+            self.fields['scheduled_date'].widget = forms.DateInput(attrs={'type': 'date'})        
+
 
 #Request : demande intervention
 class MaintenanceRequestForm(forms.ModelForm):
     class Meta:
         model = MaintenanceRequest
-        fields = '__all__'
-
-
+        fields = ['title','description','maintenance_type','technician']
+ 
 
 #Maintenance : piece de rechange :        
 class PieceForm(forms.ModelForm):
