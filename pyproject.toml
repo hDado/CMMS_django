@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "cmms-django"
+version = "0.1.0"
+description = "django project for sheduling maintenance /dashboard crud app"
+authors = ["Hamza AZZOUZ <azzouzhamza13@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^5.0.3"
+django-crispy-forms = "^2.1"
+
+[tool.poetry.plugins."poetry.plugin"]
+demo = "poetry_demo_plugin.plugin:MyPlugin"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
