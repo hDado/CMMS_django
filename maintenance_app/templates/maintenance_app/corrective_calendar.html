@@ -1,0 +1,58 @@
+{% extends 'maintenance_app/main.html' %}
+{% load static %}
+
+{% block title %} Corrective maintenance    {% endblock %}
+    
+    
+
+
+{% block additional_headers %}
+    <link rel="stylesheet" href="{% static 'maintenance_app/css/mpstyle.css' %}">
+
+
+
+    <!-- fullcalendar bundle -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                selectable: true,
+                events: '/all_corr_data/',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                
+                });
+                calendar.render();
+            });
+
+    </script>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container" id="conl">
+ <div class="row">
+    <h4>- Corrective maintenance </h4> 
+    <div> 
+        <a> <!-- -->  Intervention maintenance en cours   
+
+        </a>
+    </div>
+     
+    <div class="col-md-12">    
+        <div id='calendar'></div> 
+    </div> 
+</div>
+</div>    
+
+{% endblock %}

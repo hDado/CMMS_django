@@ -82,15 +82,24 @@ class PreventiveForm(forms.ModelForm):
         model = PreventiveMaintenance
         fields = "__all__"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['start_date'].widget = forms.DateInput(attrs={'type': 'date'}) 
+        self.fields['end_date'].widget = forms.DateInput(attrs={'type': 'date'}) 
+
+            
+
+
 class CorrectiveForm(forms.ModelForm):
     class Meta:
         model = CorrectiveMaintenance
-        fields = ["name", "equipment", "scheduled_date", "maintenance_duration"]
+        fields = ["name", "equipment", "scheduled_date", "end_date","maintenance_duration"]
 
     def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
     
             self.fields['scheduled_date'].widget = forms.DateInput(attrs={'type': 'date'})        
+            self.fields['end_date'].widget = forms.DateInput(attrs={'type': 'date'})        
 
 
 #Request : demande intervention

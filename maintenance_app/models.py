@@ -68,10 +68,12 @@ class Equipment(models.Model):
 
 
 class PreventiveMaintenance(models.Model):
-    name =  models.CharField(max_length=50, default='preventive -')
+    activity = models.CharField(max_length=50, default='ACTIVITY -')
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
+    start_date = models.DateField(null=True, blank=True)
     maintenance_frequency_days = models.IntegerField()
-    maintenance_duration = models.DurationField()
+    # Optionally, add an end_date if needed
+    end_date = models.DateField(null=True, blank=True)
     expected_mean_time_between_failures = models.DurationField()
 
     def __str__(self):
@@ -80,7 +82,8 @@ class PreventiveMaintenance(models.Model):
 class CorrectiveMaintenance(models.Model):
     name =  models.CharField(max_length=50)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
-    scheduled_date = models.DateField() #start time
+    scheduled_date = models.DateTimeField() #start time
+    end_date = models.DateTimeField(null=True)
     maintenance_duration = models.DecimalField(max_digits=5, decimal_places=2, default=0.00) #end time
  
 

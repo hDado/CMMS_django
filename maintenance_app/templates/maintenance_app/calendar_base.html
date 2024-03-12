@@ -13,7 +13,7 @@
 <div class="container">
  <div class="row">
     <h4>Python Django Ajax FullCalender CRUD (Create, Read, Update and Delete)</h4> 
-    {% block content %}{% endblock %}
+    {% block content %} {% endblock %}
  </div>
 </div>
 
@@ -35,7 +35,7 @@ $(document).ready(function() {
            selectHelper: true,
            editable: true,
            eventLimit: true,
-           eventResize: function (event) {
+           /*eventResize: function (event) {
                var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
                var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
                var title = event.title;
@@ -53,8 +53,8 @@ $(document).ready(function() {
                        alert('Update event failed!!!');
                    }
                });
-           },
-           eventDrop: function (event) {
+           },*/ 
+           /*eventDrop: function (event) {
                var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
                var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
                var title = event.title;
@@ -72,9 +72,9 @@ $(document).ready(function() {
                        alert('There is a problem in task update!!!');
                    }
                });
-           },
+           },*/
            /// DELETE event from calendar : 
-           eventClick: function (event) {
+          /* eventClick: function (event) {
                if (confirm("Are you sure you want to remove it?")) {
                    var id = event.id;
                    $.ajax({
@@ -91,7 +91,7 @@ $(document).ready(function() {
                        }
                    });
                }
-           },
+           },*/
 
     });
   

@@ -1,12 +1,13 @@
 # maintenance_app/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse 
-from .models import Technician, CorrectiveMaintenance , MaintenanceRequest,EquipmentCategory, Equipment, MaintenanceHistory, MaintenanceSchedule, Events, Task, PieceRechange
+from .models import PreventiveMaintenance , Technician, CorrectiveMaintenance , MaintenanceRequest,EquipmentCategory, Equipment, MaintenanceSchedule, Events, Task, PieceRechange
 from django.utils import timezone
-from .forms import TechForm, CorrectiveForm, MaintenanceRequestForm,EquipCategoryForm,MaintenanceScheduleForm, TaskForm, PieceForm, EquipForm
+from .forms import PreventiveForm  , TechForm, CorrectiveForm, MaintenanceRequestForm,EquipCategoryForm,MaintenanceScheduleForm, TaskForm, PieceForm, EquipForm
 from django.contrib import messages
 from crispy_forms.helper import FormHelper
 import logging
+from django.core.serializers import serialize
 #=========================
 #Auth : 
 def register(request):
@@ -69,18 +70,58 @@ def EquipCatView(request):
 
 
 #
-#maintenance request : intervention (fiche_m.html)
-def add_preventive_maintenance(request): #todo
+#maintenance request : intervention (add_pm.html)
+def add_preventive_maintenance(request): 
     if request.method == 'POST':
         form_p = PreventiveForm(request.POST)
         if form.is_valid():
             form_p.save()
-            return redirect('success_page')  # Redirect to a success page
+            return redirect('allmp')  # Redirect to a success page
     else:
-        form_p = PreventiveMaintenanceForm()
+        form_p = PreventiveForm()
 
-    return render(request, 'your_template.html', {'form_p': form_p})
+    return render(request, 'maintenance_app/add_pm.html', {'form_p': form_p})
 #
+#preventive maintenance Calendar :
+def allPreventive(request):
+    all_events = PreventiveMaintenance.objects.all()
+    context = {
+        "events" : all_events,
+    }   
+
+    return render(request, 'maintenance_app/mpcalendar.html', context)
+
+
+#done
+def all_preventive_maintenance(request):
+
+    all_preventive_maintenance = PreventiveMaintenance.objects.all()
+    events = []
+
+    for maintenance in all_preventive_maintenance:
+        rrule = {
+                'freq': 'daily',
+                'interval': maintenance.maintenance_frequency_days,
+                'dtstart': maintenance.start_date.isoformat(),
+                'until': maintenance.end_date.isoformat() if maintenance.end_date else None
+            }
+        # Format the start and end dates as ISO strings
+        start_date = maintenance.start_date.isoformat()
+        end_date = maintenance.end_date.isoformat() if maintenance.end_date else None
+
+        # Construct the event object with title, start, and end
+        event = {
+            'title': maintenance.activity,
+            'start': start_date,
+            'end': end_date,
+            'rrule': rrule, # Include rrule here
+        }
+
+        events.append(event)
+
+    # Return the events as JSON
+    return JsonResponse(events, safe=False)
+
 """
 def add_corrective_maintenance(request):
     if request.method == 'POST':
@@ -134,29 +175,6 @@ def Piece(request):
 
 
 
-
-
-
-
-def maintenance_history_list(request):
-    history_entries = MaintenanceSchedule.objects.all()
-    return render(request, 'maintenance_app/maintenance_history_list.html', {'history_entries': history_entries})
-#calendar maintenance : 
-"""
-def calendar_m(request):
-    all_m = MaintenanceSchedule.objects.all()
-    out =[]
-    for m in all_m:
-        out.append({
-            ''
-        }) 
-        
-
-    context = {'history_entries': history_entries}
-    return render(request, 'maintenance_app/maintenance_history_list.html', context)
-"""
-
-
 #Create a View to Show Future and Past Maintenance Schedules
 def maintenance_schedule_list(request, status='today'):
     today = timezone.now().date()
@@ -203,9 +221,9 @@ def MaintenanceScheduleView(request):
     
 
 
-
-def edit_MaintenanceScheduleView(request, pk):  
 #originale
+def edit_MaintenanceScheduleView(request, pk):  
+
     instance = get_object_or_404(MaintenanceSchedule, pk=pk)
     form = MaintenanceScheduleForm(instance=instance)
     if request.method == 'POST':
@@ -231,8 +249,38 @@ def edit_MaintenanceScheduleView2(request, pk):
     return render(request, 'maintenance_app/edit_m.html', {'form': form, 'pk': pk})
 
 
+#Corrective Maintenance calendar : 
+#Todo :
+def CorrCalView(request):
+    all_events = CorrectiveMaintenance.objects.all()
+    context = {
+        "events" : all_events,
+    }   
+
+    return render(request, 'maintenance_app/corrective_calendar.html', context)
+
+
+#json output data as api :
+def all_corr(request):
+    all_corr = CorrectiveMaintenance.objects.all()
+    out=[]
+    for event in all_corr:
+        event =({
+            'title' : event.name,
+            'id' : event.id,
+            'start' :event.scheduled_date.isoformat(),
+            'end' : event.end_date.isoformat() if event.end_date else None,  # ISO 8601 format or None
+        }
+
+        )
+        out.append(event)
+    return JsonResponse(out, safe=False)
+        
+
+
 
 #EVENTS CALENDAR : 
+
 
 def index(request):
     all_events = Events.objects.all()
